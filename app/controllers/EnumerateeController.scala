@@ -9,10 +9,12 @@ object EnumerateeController extends Controller {
   def enumerateeExample = Action.async { request =>
     val iterator: Iteratee[Int, Int] = Iteratee.fold(0) { (total: Int, elt: Int) => total + elt}
 
-    val enumerator: Enumerator[Int] = Enumerator(100, 200, 300)
+    val enumerator: Enumerator[String] = Enumerator("100", "200", "300")
+    val toInt: Enumeratee[String,Int] = Enumeratee.map[String]{ s => s.toInt}
+
     val enumerator2: Enumerator[Int] = Enumerator(1, 5, 10)
 
-    for {total1 <- enumerator.run(iterator)
+    for {total1 <- enumerator.run(toInt.transform(iterator))
          total2 <- enumerator2.run(iterator)}
     yield Ok("Sum of enumerator one is " + total1 + " sum of enumerator two is " + total2)
   }

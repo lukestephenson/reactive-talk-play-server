@@ -9,7 +9,6 @@ import scala.concurrent.Future
 object Application extends Controller {
 
   def index = Action {
-//    Ok(views.html.index("Your new application is ready."))
     Ok("Hello Play")
   }
 
@@ -26,4 +25,8 @@ object Application extends Controller {
       Ok("Hello From DB")
     }
   }
+
+  case class Product(name:String, description: String)
+
+  
 }

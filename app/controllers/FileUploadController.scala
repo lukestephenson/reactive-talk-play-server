@@ -18,21 +18,22 @@ object FileUploadController extends Controller {
 
   private def bodySizeCountingIteratee: Iteratee[Array[Byte], Int] = {
     def step(total: Int): Input[Array[Byte]] => Iteratee[Array[Byte], Int] = {
-      case Input.EOF | Input.Empty => Done(total, Input.EOF)
       case Input.El(e) => Cont(step(total + e.size))
+      case Input.Empty => Cont(step(total))
+      case Input.EOF => Done(total, Input.EOF)
     }
     Cont(step(0))
   }
 
   private def countLengthBodyParser: BodyParser[Int] = BodyParser("count length") { request =>
-//    val bodySizeCountingIteratee: Iteratee[Array[Byte], Int] = Iteratee.fold(0) { (state: Int, chunk: Array[Byte]) => state + chunk.size}
+    //    val bodySizeCountingIteratee: Iteratee[Array[Byte], Int] = Iteratee.fold(0) { (state: Int, chunk: Array[Byte]) => state + chunk.size}
 
     bodySizeCountingIteratee map (size => Right(size))
   }
 
   // as above, but without the intermediate variables
   private def countLengthBodyParserCompact: BodyParser[Int] = BodyParser("count length compact") { request =>
-    Iteratee.fold(0) { (state, chunk: Array[Byte]) => state + chunk.size} map (size => Right(size))
+    Iteratee.fold(0) { (state, chunk: Array[Byte]) => state + chunk.size } map (size => Right(size))
   }
 
 
