@@ -4,15 +4,13 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /db1                        controllers.Application.dbOperationDbPool
-GET     /db2                        controllers.Application.dbOperationPlayPool
 
 GET     /iteratee                   controllers.EnumerateeController.enumerateeExample
 
 POST    /size                       controllers.FileUploadController.reportPostUploadSize
 POST    /save-size                  controllers.FileUploadController.saveTempAndReportPostUploadSize
 
+GET     /db1                        controllers.DBController.dbOperationDbPool
+GET     /db2                        controllers.DBController.dbOperationPlayPool
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
