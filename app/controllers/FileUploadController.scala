@@ -8,12 +8,7 @@ object FileUploadController extends Controller {
 
   def reportPostUploadSize = Action(countLengthBodyParser) { request =>
     val bodySize: Int = request.body // only to show what type this is.
-    Ok("Size of body is " + bodySize)
-  }
-
-  def saveTempAndReportPostUploadSize = Action(BodyParsers.parse.temporaryFile) { request =>
-    val bodySize: Long = request.body.file.length() // only to show what type this is.
-    Ok("Size of body is " + bodySize)
+    Ok("Play - Size of body is " + bodySize)
   }
 
   private def bodySizeCountingIteratee: Iteratee[Array[Byte], Int] = {
@@ -26,14 +21,17 @@ object FileUploadController extends Controller {
   }
 
   private def countLengthBodyParser: BodyParser[Int] = BodyParser("count length") { request =>
-    //    val bodySizeCountingIteratee: Iteratee[Array[Byte], Int] = Iteratee.fold(0) { (state: Int, chunk: Array[Byte]) => state + chunk.size}
-
-    bodySizeCountingIteratee map (size => Right(size))
+      bodySizeCountingIteratee map (size => Right(size))
   }
 
   // as above, but without the intermediate variables
   private def countLengthBodyParserCompact: BodyParser[Int] = BodyParser("count length compact") { request =>
     Iteratee.fold(0) { (state, chunk: Array[Byte]) => state + chunk.size } map (size => Right(size))
+  }
+
+  def saveTempAndReportPostUploadSize = Action(BodyParsers.parse.temporaryFile) { request =>
+    val bodySize: Long = request.body.file.length() // only to show what type this is.
+    Ok("Play - Size of body is " + bodySize)
   }
 
 
