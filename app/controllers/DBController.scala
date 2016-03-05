@@ -6,7 +6,7 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
 
-object DBController extends Controller {
+class DBController extends Controller {
 
   def dbOperationDbPool = Action.async { request =>
     for {dbResult <- DatabaseOperations.loadData()}
